@@ -14,4 +14,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LetEase.Application\LetEase.Application.csproj" />
+    <ProjectReference Include="..\LetEase.Infrastructure\LetEase.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
