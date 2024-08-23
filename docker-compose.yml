@@ -1,0 +1,24 @@
+﻿version: '3.4'
+
+services:
+  letease.api:
+    image: ${DOCKER_REGISTRY-}leteaseapi
+    build:
+      context: .
+      dockerfile: LetEase.API/Dockerfile
+    ports:
+      - "8080:80"
+      - "8081:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=db;Database=LetEase;User=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True
+    depends_on:
+      - db
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: "YourStrong@Passw0rd"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"

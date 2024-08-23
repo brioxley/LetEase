@@ -1,29 +1,22 @@
-# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-# This stage is used when running from VS in fast mode (Default for Debug configuration)
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER app
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-nanoserver-1809 AS base
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 80
+EXPOSE 443
 
-
-# This stage is used to build the service project
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
+FROM mcr.microsoft.com/dotnet/sdk:8.0-nanoserver-1809 AS build
 WORKDIR /src
-COPY ["LetEase.API.csproj", "."]
-RUN dotnet restore "./LetEase.API.csproj"
+COPY ["LetEase.API/LetEase.API.csproj", "LetEase.API/"]
+COPY ["LetEase.Application/LetEase.Application.csproj", "LetEase.Application/"]
+COPY ["LetEase.Infrastructure/LetEase.Infrastructure.csproj", "LetEase.Infrastructure/"]
+COPY ["LetEase.Domain/LetEase.Domain.csproj", "LetEase.Domain/"]
 COPY . .
-WORKDIR "/src/."
-RUN dotnet build "./LetEase.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet restore "LetEase.API/LetEase.API.csproj"
+WORKDIR "/src/LetEase.API"
+RUN dotnet build "LetEase.API.csproj" -c Release -o /app/build
 
-# This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./LetEase.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "LetEase.API.csproj" -c Release -o /app/publish
 
-# This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
