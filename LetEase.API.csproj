@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LetEase.Application\LetEase.Application.csproj" />
+    <ProjectReference Include="..\LetEase.Domain\LetEase.Domain.csproj" />
     <ProjectReference Include="..\LetEase.Infrastructure\LetEase.Infrastructure.csproj" />
   </ItemGroup>
 
