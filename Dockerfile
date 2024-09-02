@@ -1,6 +1,10 @@
 # Use the .NET SDK image for Windows
-FROM mcr.microsoft.com/dotnet/sdk:8.0-windowsservercore-ltsc2019 AS build
-WORKDIR /src
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 COPY ["LetEase.API/LetEase.API.csproj", "LetEase.API/"]
 COPY ["LetEase.Application/LetEase.Application.csproj", "LetEase.Application/"]
 COPY ["LetEase.Infrastructure/LetEase.Infrastructure.csproj", "LetEase.Infrastructure/"]
