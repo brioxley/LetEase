@@ -4,11 +4,7 @@ services:
   letease.api:
     image: ${DOCKER_REGISTRY-}leteaseapi
     build:
-      context: ..
+      context: .
       dockerfile: LetEase.API/Dockerfile
-    ports:
-      - "8080:80"
-      - "8081:443"  
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+    network_mode: host
       # - ConnectionStrings__DefaultConnection=Server=OXLEYNETWEB01;Database=LetEase;User=sa;Password=Joyce1975;TrustServerCertificate=True
